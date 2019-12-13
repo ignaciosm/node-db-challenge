@@ -7,12 +7,29 @@ const router = express.Router();
 
 // LIST PROJECTS
 router.get('/', (req, res) => {
-  projects.list()
+  projects.find()
   .then(projects => {
     res.json(projects);
   })
   .catch(err => {
     res.status(500).json({ message: 'Failed to get projects' });
+  });
+});
+
+// FIND PROJECT BY ID
+router.get('/:id', (req, res) => {
+  const { id } = req.params;
+
+  projects.findById(id)
+  .then(project => {
+    if (project) {
+      res.json(project);
+    } else {
+      res.status(404).json({ message: 'Could not find project with given id.' })
+    }
+  })
+  .catch(err => {
+    res.status(500).json({ message: 'Failed to get project' });
   });
 });
 
@@ -26,6 +43,23 @@ router.post('/', (req, res) => {
   })
   .catch (err => {
     res.status(500).json({ message: 'Failed to create new project' });
+  });
+});
+
+// GET TASKS FOR PROJECT
+router.get('/:id/tasks', (req, res) => {
+  const { id } = req.params;
+
+  projects.findTasks(id)
+  .then(tasks => {
+    if (tasks.length) {
+      res.json(tasks);
+    } else {
+      res.status(404).json({ message: 'Could not find tasks for given project' })
+    }
+  })
+  .catch(err => {
+    res.status(500).json({ message: 'Failed to get tasks' });
   });
 });
 

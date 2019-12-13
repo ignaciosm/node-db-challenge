@@ -1,12 +1,25 @@
 const db = require("../data/db-config.js");
 
 module.exports = {
-  list,
+  find,
+  findById,
+  findTasks,
   add
 }
 
-function list() {
+function find() {
   return db("projects");
+}
+
+function findById(id) {
+  return db("projects").where({id}).first();
+}
+
+function findTasks(projectId) {
+  return db("tasks")
+    .select('tasks.id', 'projects.name', 'tasks.description')
+    .join('projects', 'tasks.project_id', 'projects.id')
+    .where('project_id', projectId)
 }
 
 function add(project) {
