@@ -1,10 +1,12 @@
 const express = require('express');
 
-// const SchemeRouter = require('./schemes/scheme-router.js');
+const ProjectsRouter = require('./projects/projects-router.js');
+const ResourcesRouter = require('./resources/resources-router.js');
 
 const server = express();
 
 server.use(express.json());
-// server.use('/api/schemes', SchemeRouter);
+server.use('/api/projects', ProjectsRouter);
+server.use('/api/resources', ResourcesRouter);
 
 module.exports = server;
