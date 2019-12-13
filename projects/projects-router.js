@@ -7,9 +7,13 @@ const router = express.Router();
 
 // LIST PROJECTS
 router.get('/', (req, res) => {
+
   projects.find()
   .then(projects => {
-    res.json(projects);
+    const newArray = projects.map(p =>
+      p.completed === 0 ? { ...p, completed: false } : {...p, completed: true}
+    );
+    res.json(newArray);
   })
   .catch(err => {
     res.status(500).json({ message: 'Failed to get projects' });
@@ -53,7 +57,10 @@ router.get('/:id/tasks', (req, res) => {
   projects.findTasks(id)
   .then(tasks => {
     if (tasks.length) {
-      res.json(tasks);
+      const newArray = tasks.map(t =>
+        t.completed === 0 ? { ...t, completed: false } : {...t, completed: true}
+      );
+      res.json(newArray);
     } else {
       res.status(404).json({ message: 'Could not find tasks for given project' })
     }
